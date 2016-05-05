@@ -4,6 +4,7 @@
   var ROUTER_CLASS_NAME = 'data-react-router-class';
   var LOCATION_CLASS_NAME = 'data-react-router-location';
   var PROPS_ID_ATTR = 'data-react-props-id';
+  var PROPS_ATTR = 'data-react-props';
   var DATA_CLASS_NAME = 'data-react-router-data';
 
   // jQuery is optional. Use it to support legacy browsers.
