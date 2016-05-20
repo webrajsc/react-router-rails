@@ -4,6 +4,7 @@
   var ROUTER_CLASS_NAME = 'data-react-router-class';
   var LOCATION_CLASS_NAME = 'data-react-router-location';
   var PROPS_ID_ATTR = 'data-react-props-id';
+  var PROPS_ATTR = 'data-react-props';
   var DATA_CLASS_NAME = 'data-react-router-data';
 
   // jQuery is optional. Use it to support legacy browsers.
@@ -51,8 +52,17 @@
     }
   };
 
+  var unmountReactRouter = function() {
+    var nodes = findReactRouterDOMNodes();
+
+    for (var i = 0; i < nodes.length; ++i) {
+      var node = nodes[i];
+      ReactDOM.unmountComponentAtNode(node);
+    }
+  };
+
   var handleTurbolinksEvents = function() {
-    var handleEvent;
+    var handleEvent, unmountEvent;
     if ($) {
       handleEvent = function(eventName, callback) {
         $(document).on(eventName, callback);
@@ -62,7 +72,16 @@
         document.addEventListener(eventName, callback);
       };
     }
+
+    if (Turbolinks.EVENTS) {
+      unmountEvent = Turbolinks.EVENTS.BEFORE_UNLOAD;
+    } else {
+      unmountEvent = 'page:receive';
+      Turbolinks.pagesCached(0);
+    }
+
     handleEvent('page:change', mountReactRouter);
+    handleEvent(unmountEvent, unmountReactRouter);
   };
 
   var handleNativeEvents = function() {
